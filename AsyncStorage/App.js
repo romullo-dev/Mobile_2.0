@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export default function App() {
   const [user, setUser ] = useState ('');
-  const [consulta,setC1onsulta] = useState ('');
+  const [consulta,setConsulta] = useState ('');
 
   //salvar usuario
   
@@ -14,7 +14,6 @@ try {
       await AsyncStorage.setItem('@id_user', user);
       alert ('salvo com sucesso')
   }
-  
 } catch (error) {
   alert( 'erro ao salvar')
 }
@@ -31,7 +30,8 @@ try {
       />
       <Button
       title='Salvar'
-      onPress={userSalve}
+      value={consulta}
+      onPress={setConsulta}
       />
       <StatusBar style="auto" />
     </View>
