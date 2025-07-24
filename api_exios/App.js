@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import axios from 'axios'
 import { useState } from 'react';
 
 export default function App() {
   const [autor, setAutor] = useState([]);
+  const [nomeAutor, setNomeAutor] = useState([]);
 
  
  async function getAutor() {
@@ -13,6 +14,17 @@ export default function App() {
       setAutor (resposta.data);
     } catch (error) {
       alert ('erro');
+    }
+ }
+
+ async function postAutor() {
+    try {
+      const resposta = await axios.post('http://10.0.2.2:81/livros/api.php', {
+      nome:nomeAutor,
+      });
+      setNomeAutor('')
+    } catch (error) {
+      alert ('erro');      
     }
  }
  
@@ -30,6 +42,19 @@ export default function App() {
       )}
        />
       <StatusBar style="auto" />
+
+      <Text>------------------</Text>
+      <Text>Inserir Autor</Text>
+      <TextInput
+      value='nomeAutor'
+      onChange={setNomeAutor}/>
+
+      <Button 
+      title='Inserir' onPress={postAutor}
+      />
+      
+      
+
     </View>
   );
 }
