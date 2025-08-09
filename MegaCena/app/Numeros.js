@@ -6,22 +6,39 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
+import useStorage from "./useStorage";
 import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 import { FlatList } from "react-native";
 
 export function Numeros() {
-  
+  const [listaNum, setListaNum] = useState([]);
+  const focused = useIsFocused();
+  const { getItem } = useStorage();
+
+  useEffect(() => {
+
+    async function loadData() {
+      const numeros = await getItem('@key');
+      setListaNum(numeros);
+      loadNumero();
+    }}, [focused]);
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
-        <Text style={styles.title}>Minhas senhas</Text>
+        <Text style={styles.title}>Meus números</Text>
       </View>
 
+
       <View style={styles.container}>
-        
+        <FlatList
+          style={{ flex: 1, paddingTop: 14 }}
+          data={listaNum}
+          keyExtractor={(item) => String(item)}
+        />
       </View>
     </SafeAreaView>
   );

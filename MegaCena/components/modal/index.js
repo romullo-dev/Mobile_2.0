@@ -9,7 +9,7 @@ import {
 import * as Clipboard from "expo-clipboard";
 
 export function ModalTelecena({ numeros, handleClose }) {
-  //const { saveItem } = useStorage();
+  const { saveItem } = useStorage();
 
   async function handleCopyNumbers() {
     const numerosStr = Array.isArray(numeros) ? numeros.join(", ") : String(numeros);
