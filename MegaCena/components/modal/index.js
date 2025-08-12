@@ -7,17 +7,28 @@ import {
   Pressable,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
+import useStorage from "../../app/useStorage";
 
 export function ModalTelecena({ numeros, handleClose }) {
-  const { saveItem } = useStorage();
+  const { getItem, saveItem } = useStorage();
 
   async function handleCopyNumbers() {
-    const numerosStr = Array.isArray(numeros) ? numeros.join(", ") : String(numeros);
-    await Clipboard.setStringAsync(numerosStr);
-    await saveItem("@telecena_numeros", numerosStr);
+    try {
+      const numerosStr = Array.isArray(numeros) ? numeros.join(", ") : String(numeros);
+      await Clipboard.setStringAsync(numerosStr);
 
-    alert("Números copiados e salvos");
-    handleClose();
+      const jogosAnteriores = await getItem("@telecena_numeros");
+      const historico = Array.isArray(jogosAnteriores) && Array.isArray(jogosAnteriores[0])
+        ? jogosAnteriores
+        : [];
+
+      await saveItem("@telecena_numeros", [...historico, numeros]);
+
+      alert("Números copiados e salvos");
+      handleClose();
+    } catch (error) {
+      console.log("Erro ao copiar e salvar:", error);
+    }
   }
 
   return (
@@ -26,7 +37,9 @@ export function ModalTelecena({ numeros, handleClose }) {
         <Text style={styles.title}>Números da Telecena</Text>
 
         <Pressable style={styles.inner} onLongPress={handleCopyNumbers}>
-          <Text style={styles.text}>{Array.isArray(numeros) ? numeros.join(", ") : numeros}</Text>
+          <Text style={styles.text}>
+            {Array.isArray(numeros) ? numeros.join(", ") : numeros}
+          </Text>
         </Pressable>
 
         <View style={styles.area}>

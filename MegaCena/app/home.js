@@ -1,13 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { ModalTelecena } from "../components/modal";
+import useStorage from './useStorage';
+
 
 export default function App() {
+  const { saveItem } = useStorage();
   const [numbers, setNumbers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  function gerarNumero() {
+  async function gerarNumero() {
     const numeroGerado = new Set();
     while (numeroGerado.size < 6) {
       const num = Math.floor(Math.random() * 60) + 1;
@@ -17,8 +20,12 @@ export default function App() {
     setNumbers(numerosArray);
     console.log("Números gerados:", numerosArray);
 
+    await saveItem("@telecena_numeros", numerosArray); // salva a lista no storage
+
     setModalVisible(true);
   }
+  // resto do código...
+
 
   return (
     <View style={styles.container}>
