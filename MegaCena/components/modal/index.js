@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import useStorage from "../../app/useStorage";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export function ModalTelecena({ numeros, handleClose }) {
   const { getItem, saveItem } = useStorage();
@@ -32,7 +34,7 @@ export function ModalTelecena({ numeros, handleClose }) {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.cont}>
         <Text style={styles.title}>Números da Telecena</Text>
 
@@ -55,7 +57,7 @@ export function ModalTelecena({ numeros, handleClose }) {
         </View>
       </View>
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -64,8 +66,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(24,24,24,0.6)",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start", // coloca no topo
+    paddingTop: "20%", // empurra um pouco para baixo
   },
+  
+  
   cont: {
     backgroundColor: "#fff",
     width: "85%",

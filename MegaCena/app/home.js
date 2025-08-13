@@ -1,9 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
-import { use, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { useState } from 'react';
 import { ModalTelecena } from "../components/modal";
 import useStorage from './useStorage';
-
 
 export default function App() {
   const { saveItem } = useStorage();
@@ -18,22 +17,27 @@ export default function App() {
     }
     const numerosArray = [...numeroGerado].sort((a, b) => a - b);
     setNumbers(numerosArray);
-    console.log("Números gerados:", numerosArray);
 
-    await saveItem("@telecena_numeros", numerosArray); // salva a lista no storage
-
+    await saveItem("@telecena_numeros", numerosArray);
     setModalVisible(true);
   }
-  // resto do código...
-
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Gerar Número da Mega Sena</Text>
+    <ImageBackground
+      source={{ uri: 'https://i.ibb.co/hfDbW8n/gradient-bg.jpg' }} // fundo elegante
+      style={styles.bg}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
 
-      <TouchableOpacity style={styles.button} onPress={gerarNumero}>
-        <Text style={styles.button_text}>Gerar números</Text>
-      </TouchableOpacity>
+      <View style={styles.container}>
+        <Text style={styles.title}>🎰 Mega Sena</Text>
+        <Text style={styles.subtitle}>Seu gerador de números da sorte</Text>
+
+        <TouchableOpacity style={styles.button} onPress={gerarNumero}>
+          <Text style={styles.button_text}>🎯 Gerar números</Text>
+        </TouchableOpacity>
+      </View>
 
       <Modal
         visible={modalVisible}
@@ -47,33 +51,54 @@ export default function App() {
         />
       </Modal>
 
-      <StatusBar style="auto" />
-    </View>
+      <StatusBar style="light" />
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  bg: {
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f3f3ff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: 38,
     fontWeight: 'bold',
+    color: '#00ff88',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 8,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#fff',
+    marginBottom: 50,
+    textAlign: 'center',
+    opacity: 0.85,
   },
   button: {
-    backgroundColor: '#392de9',
-    width: '80%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    marginTop: 20,
+    backgroundColor: '#00ff88',
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    borderRadius: 25,
+    shadowColor: '#00ff88',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
   },
   button_text: {
-    color: '#fff',
+    color: '#121212',
     fontSize: 20,
+    fontWeight: 'bold',
   },
 });

@@ -21,7 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.romullo.franca.MegaCena"
+      "package": "com.romullo.franca.MegaSena"
     },
     "web": {
       "favicon": "./assets/favicon.png"

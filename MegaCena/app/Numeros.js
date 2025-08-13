@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import useStorage from "./useStorage";
 import { useState, useEffect } from "react";
@@ -18,7 +19,7 @@ export function Numeros() {
 
   useEffect(() => {
     async function loadData() {
-      const jogos = await getItem("@telecena_numeros") || [];
+      const jogos = (await getItem("@telecena_numeros")) || [];
       const historico = Array.isArray(jogos[0]) ? jogos : [];
       setListaJogos(historico.reverse()); // mostra o mais recente primeiro
     }
@@ -44,83 +45,114 @@ export function Numeros() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="light" />
-      <View style={styles.header}>
-        <Text style={styles.title}>Meus números</Text>
-      </View>
+    <ImageBackground
+      source={{ uri: "https://i.ibb.co/hfDbW8n/gradient-bg.jpg" }}
+      style={styles.bg}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
 
-      <View style={styles.container}>
-        {listaJogos.length === 0 ? (
-          <Text style={styles.emptyText}>Nenhum número salvo ainda</Text>
-        ) : (
-          <>
-            <Text style={styles.contador}>
-              Total de jogos salvos: {listaJogos.length}
-            </Text>
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar style="light" />
 
-            <FlatList
-              data={listaJogos}
-              keyExtractor={(item, index) => String(index)}
-              renderItem={renderJogo}
-              contentContainerStyle={styles.listContent}
-            />
-
-            <TouchableOpacity style={styles.clearButton} onPress={limparHistorico}>
-              <Text style={styles.clearButtonText}>🧹 Limpar histórico</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>🎲 Meus números</Text>
+          {listaJogos.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={limparHistorico}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.clearButtonText}>🧹 Limpar</Text>
             </TouchableOpacity>
-          </>
-        )}
-      </View>
-    </SafeAreaView>
+          )}
+        </View>
+
+        <View style={styles.container}>
+          {listaJogos.length === 0 ? (
+            <Text style={styles.emptyText}>Nenhum número salvo ainda</Text>
+          ) : (
+            <>
+              <Text style={styles.contador}>
+                Total de jogos salvos: {listaJogos.length}
+              </Text>
+
+              <FlatList
+                data={listaJogos}
+                keyExtractor={(item, index) => String(index)}
+                renderItem={renderJogo}
+                contentContainerStyle={styles.listContent}
+              />
+            </>
+          )}
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  bg: {
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.45)",
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: "#392de9",
   },
   header: {
     paddingVertical: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#2a24b5",
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 6,
   },
   title: {
-    fontSize: 22,
-    color: "#fff",
+    fontSize: 32,
     fontWeight: "bold",
+    color: "#00ff88",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 8,
   },
   container: {
     flex: 1,
-    backgroundColor: "#f3f3ff",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    backgroundColor: "transparent",
+    paddingHorizontal: 15,
   },
   listContent: {
-    paddingBottom: 20,
+    paddingBottom: 30,
   },
   emptyText: {
-    color: "#666",
-    fontSize: 16,
+    color: "#ccc",
+    fontSize: 18,
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 50,
+    fontStyle: "italic",
   },
   jogoContainer: {
-    marginBottom: 20,
+    marginBottom: 25,
+    backgroundColor: "rgba(0, 255, 136, 0.1)",
+    borderRadius: 12,
+    padding: 15,
     alignItems: "center",
+    shadowColor: "#00ff88",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
   },
   jogoTitulo: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 10,
-    color: "#222",
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 12,
+    color: "#00ff88",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   numerosContainer: {
     flexDirection: "row",
@@ -129,41 +161,51 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   numberCircle: {
-    backgroundColor: "#392de9",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    backgroundColor: "#00ff88",
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     marginHorizontal: 6,
     marginVertical: 6,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#222",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.4,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowColor: "#00ff88",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 7,
+    elevation: 6,
   },
   numberText: {
-    color: "#fff",
+    color: "#121212",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 20,
   },
   contador: {
-    fontSize: 16,
-    color: "#222",
+    fontSize: 18,
+    color: "#00ff88",
     textAlign: "center",
     marginBottom: 10,
+    fontWeight: "600",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 6,
   },
   clearButton: {
-    marginTop: 20,
-    alignSelf: "center",
-    padding: 10,
     backgroundColor: "#ff4d4d",
-    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 25,
+    shadowColor: "#ff4d4d",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
   },
   clearButtonText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+
+    width : 60
   },
 });

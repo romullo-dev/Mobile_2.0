@@ -1,9 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Home from "./app/home";
 import { Numeros } from "./app/Numeros";
 import { Ionicons } from "@expo/vector-icons";
-
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -12,6 +11,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      <StatusBar style="light" backgroundColor="#392DE9" />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
@@ -25,8 +25,19 @@ export default function App() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "#392DE9",
-          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: "#fff",
+          tabBarInactiveTintColor: "#cfcfcf",
+          tabBarStyle: {
+            backgroundColor: "#392DE9",
+            borderTopWidth: 0,
+            elevation: 5,
+            paddingBottom: 6,
+            height: 60,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: "600",
+          },
           headerShown: false,
         })}
       >
@@ -40,7 +51,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f6fa",
     alignItems: "center",
     justifyContent: "center",
   },
